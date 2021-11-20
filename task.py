@@ -1,3 +1,50 @@
+def conv_hex(num_str):
+    """
+    Convert a hex-string into an integer. Invalid input returns None.
+    :param str num_str: hex-string
+    :return int result: base 10 number
+    """
+    str_mapping = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
+                   '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11, 'c': 12,
+                   'd': 13, 'e': 14, 'f': 15}
+
+    result = 0
+    multiplier = len(num_str) - 1
+    for s in num_str:
+        if s.lower() not in str_mapping:
+            return
+        result += str_mapping[s.lower()] * (16 ** multiplier)
+        multiplier -= 1
+
+    return result
+
+
+def conv_dec(num_str):
+    """
+    Convert a decimal-string into a decimal. Invalid input returns None.
+    :param str num_str: decimal-string
+    :return int, float result: base 10 number
+    """
+    str_mapping = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
+                   '7': 7, '8': 8, '9': 9, 'a': 10}
+
+    result = 0
+    multiplier = len(num_str) - 1
+    is_float = False
+    for s in num_str:
+        if s == '.' and not is_float:
+            is_float = True
+            result //= 10**(multiplier + 1)
+            multiplier = -1
+            continue
+        if s.lower() not in str_mapping:
+            return
+        result += str_mapping[s.lower()] * (10 ** multiplier)
+        multiplier -= 1
+
+    return result
+
+
 def conv_num(num_str):
     """
     Function 1: takes string, converts to a base 10 number, and returns it
@@ -6,19 +53,9 @@ def conv_num(num_str):
     :return int result: base 10 number
     """
 
-    STR_MAPPING = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
-                   '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11, 'c': 12,
-                   'd': 13, 'e': 14, 'f': 15}
-    HEX_ALPHA = ['a', 'b', 'c', 'd', 'e', 'f']
-
     # check invalid inputs
-    if num_str == '':
+    if num_str == '' or type(num_str) != str:
         return
-    if type(num_str) != str:
-        return
-
-    result = 0
-    base = 10
 
     # check if non-positive
     is_neg = False
@@ -26,39 +63,16 @@ def conv_num(num_str):
         is_neg = True
         num_str = num_str[1:]
 
-    # check if hex
-    is_hex = False
+    # check if hex or dec
     if len(num_str) > 2 and num_str[:2].lower() == '0x':
-        is_hex = True
         num_str = num_str[2:]
-        base = 16
-
-    multiplier = len(num_str) - 1
-    is_float = False
-
-    # check if valid input
-    if multiplier < 1:
-        return
-
-    for s in num_str:
-        # check float
-        if s == '.' and not is_float:
-            is_float = True
-            result //= 10**(multiplier + 1)
-            multiplier = -1
-            continue
-        # check multiple decimal points
-        if s == '.' and is_float:
+        if len(num_str) < 1:
             return
-        # check non-mapping values
-        if s.lower() not in STR_MAPPING:
+        result = conv_hex(num_str)
+    else:
+        if len(num_str) < 1:
             return
-        # check hex without leading '0x'
-        if not is_hex and s.lower() in HEX_ALPHA:
-            return
-
-        result += STR_MAPPING[s.lower()] * base**multiplier
-        multiplier -= 1
+        result = conv_dec(num_str)
 
     if is_neg:
         result *= -1
