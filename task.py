@@ -4,10 +4,12 @@ def conv_hex(num_str):
     :param str num_str: hex-string
     :return int result: base 10 number
     """
+    if len(num_str) < 1:
+        return
+
     str_mapping = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
                    '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11, 'c': 12,
                    'd': 13, 'e': 14, 'f': 15}
-
     result = 0
     multiplier = len(num_str) - 1
     for s in num_str:
@@ -25,6 +27,9 @@ def conv_dec(num_str):
     :param str num_str: decimal-string
     :return int, float result: base 10 number
     """
+    if len(num_str) < 1:
+        return
+
     str_mapping = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
                    '7': 7, '8': 8, '9': 9, 'a': 10}
 
@@ -65,16 +70,11 @@ def conv_num(num_str):
 
     # check if hex or dec
     if len(num_str) > 2 and num_str[:2].lower() == '0x':
-        num_str = num_str[2:]
-        if len(num_str) < 1:
-            return
-        result = conv_hex(num_str)
+        result = conv_hex(num_str[2:])
     else:
-        if len(num_str) < 1:
-            return
         result = conv_dec(num_str)
 
-    if is_neg:
+    if result is not None and is_neg:
         result *= -1
 
     return result
