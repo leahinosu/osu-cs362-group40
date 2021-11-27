@@ -88,6 +88,11 @@ class TestCaseConvNum(unittest.TestCase):
         expected = None
         self.assertEqual(expected, task.conv_num(sample))
 
+    def test15(self):
+        sample = '0'
+        expected = 0
+        self.assertEqual(expected, task.conv_num(sample))
+
 
 class TestCase(unittest.TestCase):
 
