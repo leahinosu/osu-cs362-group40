@@ -94,6 +94,39 @@ class TestCaseConvNum(unittest.TestCase):
         self.assertEqual(expected, task.conv_num(sample))
 
 
+class TestCaseMyDateTime(unittest.TestCase):
+
+    def test1(self):
+        date = 0
+        expected = "01-01-1970"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test2(self):
+        date = 86400
+        expected = "01-02-1970"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test3(self):
+        date = 364 * 86400
+        expected = "12-31-1970"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test4(self):
+        date = 365 * 86400
+        expected = "01-01-1971"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test5(self):
+        date = 729 * 86400
+        expected = "12-31-1971"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test6(self):
+        date = 732 * 86400
+        expected = "01-03-1972"
+        self.assertEqual(expected, task.my_datetime(date))
+
+
 class TestCase(unittest.TestCase):
 
     def test1(self):
