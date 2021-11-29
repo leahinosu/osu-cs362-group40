@@ -113,11 +113,6 @@ def day_helper(remaining_days, current):
         month = '12'
         day = remaining_days - 334
 
-    day += 1
-
-    if day < 10:
-        day = '0' + str(day)
-
     result = str(month) + "-" + str(day) + "-" + str(current)
 
     return result
