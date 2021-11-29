@@ -75,6 +75,55 @@ def conv_dec(num_str):
 
 
 def day_helper(remaining_days, current):
+
+    if remaining_days < 32:
+        month = '01'
+        day = remaining_days - 0
+    if 31 < remaining_days < 60:
+        month = '02'
+        day = remaining_days - 30
+    if 59 < remaining_days < 91:
+        month = '03'
+        day = remaining_days - 59
+    if 90 < remaining_days < 121:
+        month = '04'
+        day = remaining_days - 90
+    if 120 < remaining_days < 152:
+        month = '05'
+        day = remaining_days - 120
+    if 151 < remaining_days < 182:
+        month = '06'
+        day = remaining_days - 151
+    if 181 < remaining_days < 213:
+        month = '07'
+        day = remaining_days - 181
+    if 212 < remaining_days < 244:
+        month = '08'
+        day = remaining_days - 212
+    if 243 < remaining_days < 274:
+        month = '09'
+        day = remaining_days - 243
+    if 273 < remaining_days < 305:
+        month = '10'
+        day = remaining_days - 273
+    if 304 < remaining_days < 335:
+        month = '11'
+        day = remaining_days - 304
+    if 334 < remaining_days < 366:
+        month = '12'
+        day = remaining_days - 334
+
+    day += 1
+
+    if day < 10:
+        day = '0' + str(day)
+
+    result = str(month) + "-" + str(day) + "-" + str(current)
+
+    return result
+
+
+def leap_year_helper(remaining_days, current):
     if current % 4 == 0:
         if remaining_days < 32:
             month = '01'
@@ -112,43 +161,6 @@ def day_helper(remaining_days, current):
         if 335 < remaining_days < 367:
             month = '12'
             day = remaining_days - 335
-    else:
-        if remaining_days < 32:
-            month = '01'
-            day = remaining_days - 0
-        if 31 < remaining_days < 60:
-            month = '02'
-            day = remaining_days - 30
-        if 59 < remaining_days < 91:
-            month = '03'
-            day = remaining_days - 59
-        if 90 < remaining_days < 121:
-            month = '04'
-            day = remaining_days - 90
-        if 120 < remaining_days < 152:
-            month = '05'
-            day = remaining_days - 120
-        if 151 < remaining_days < 182:
-            month = '06'
-            day = remaining_days - 151
-        if 181 < remaining_days < 213:
-            month = '07'
-            day = remaining_days - 181
-        if 212 < remaining_days < 244:
-            month = '08'
-            day = remaining_days - 212
-        if 243 < remaining_days < 274:
-            month = '09'
-            day = remaining_days - 243
-        if 273 < remaining_days < 305:
-            month = '10'
-            day = remaining_days - 273
-        if 304 < remaining_days < 335:
-            month = '11'
-            day = remaining_days - 304
-        if 334 < remaining_days < 366:
-            month = '12'
-            day = remaining_days - 334
 
     day += 1
 
@@ -190,10 +202,11 @@ def my_datetime(num_sec):
             holder = holder - 366
     actual_year = current
     remaining_days = holder
-    # if remaining_days == 0:
-    #     remaining_days = remaining_days + 1
-    # print(current)
-    return day_helper(remaining_days, current)
+
+    if current % 4 == 0:
+        return leap_year_helper(remaining_days, current)
+    else:
+        return day_helper(remaining_days, current)
 
 
 def conv_endian(num, endian='big'):
