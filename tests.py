@@ -188,6 +188,54 @@ class TestCaseConvEndian(unittest.TestCase):
         expected = '-07 7A 67 0D'
         self.assertEqual(expected, task.conv_endian(num, 'little'))
 
+    def test10(self):
+        self.assertEqual(task.conv_endian(954786, 'big'), '0E 91 A2')
+
+    def test11(self):
+        self.assertEqual(task.conv_endian(954786), '0E 91 A2')
+
+    def test12(self):
+        self.assertEqual(task.conv_endian(-954786), '-0E 91 A2')
+
+    def test13(self):
+        self.assertEqual(task.conv_endian(954786, 'little'), 'A2 91 0E')
+
+    def test14(self):
+        self.assertEqual(task.conv_endian(-954786, 'little'), '-A2 91 0E')
+
+    def test15(self):
+        self.assertEqual(task.conv_endian(num=-954786, endian='little'),
+                         '-A2 91 0E')
+
+    def test16(self):
+        self.assertIsNone(task.conv_endian(num=-954786, endian='small'))
+
+    def test17(self):
+        self.assertEqual(task.conv_endian(0), '00')
+
+    def test18(self):
+        self.assertEqual(task.conv_endian(2), '02')
+
+    def test19(self):
+        self.assertEqual(task.conv_endian(1128), '04 68')
+
+    def test20(self):
+        self.assertEqual(task.conv_endian(256), '01 00')
+
+    def test21(self):
+        self.assertEqual(task.conv_endian(4096), '10 00')
+
+    def test22(self):
+        self.assertEqual(task.conv_endian(921), '03 99')
+
+    def test23(self):
+        self.assertEqual(task.conv_endian(188), 'BC')
+
+    def test24(self):
+        self.assertEqual(task.conv_endian(100), '64')
+
+    def test25(self):
+        self.assertEqual(task.conv_endian(590), '02 4E')
 
 if __name__ == '__main__':
     unittest.main()
