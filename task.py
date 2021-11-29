@@ -1,5 +1,6 @@
 import math
 
+
 def conv_num(num_str):
     """
     Function 1: takes string, converts to a base 10 number, and returns it
@@ -73,40 +74,7 @@ def conv_dec(num_str):
     return result if num_str[0] != '-' else -result
 
 
-def my_datetime(num_sec):
-    """
-    Function 2: takes int value that represents seconds since the epoch
-    (January 1, 1970), converts it to a date, and returns it as a string
-
-    :param int num_sec: integer representing seconds since epoch
-    :return str result: date (format: MM-DD-YYYY)
-    """
-
-    result = num_sec
-
-    epoch = 1970
-    num_minutes = num_sec / 60
-    num_hours = num_minutes / 60
-    num_days = num_hours / 24
-    counter = 0
-    holder = int(math.floor(num_days))
-    current = epoch
-    for i in range(1, holder):
-        if holder < 366 and (current + 1) % 4 == 0:
-            break
-        if holder < 365:
-            break
-        elif (current % 4) != 0:
-            current = current + 1
-            holder = holder - 365
-        elif (current % 4) == 0:
-            current = current + 1
-            holder = holder - 366
-    actual_year = current
-    remaining_days = holder
-    # if remaining_days == 0:
-    #     remaining_days = remaining_days + 1
-    # print(current)
+def day_helper(remaining_days, current):
     if current % 4 == 0:
         if remaining_days < 32:
             month = '01'
@@ -187,9 +155,45 @@ def my_datetime(num_sec):
     if day < 10:
         day = '0' + str(day)
 
-    result = str(month) + "-" + str(day) + "-" + str(actual_year)
+    result = str(month) + "-" + str(day) + "-" + str(current)
 
     return result
+
+
+def my_datetime(num_sec):
+    """
+    Function 2: takes int value that represents seconds since the epoch
+    (January 1, 1970), converts it to a date, and returns it as a string
+
+    :param int num_sec: integer representing seconds since epoch
+    :return str result: date (format: MM-DD-YYYY)
+    """
+
+    result = num_sec
+
+    epoch = 1970
+    num_minutes = num_sec / 60
+    num_hours = num_minutes / 60
+    num_days = num_hours / 24
+    holder = int(math.floor(num_days))
+    current = epoch
+    for i in range(1, holder):
+        if holder < 366 and (current + 1) % 4 == 0:
+            break
+        if holder < 365:
+            break
+        elif (current % 4) != 0:
+            current = current + 1
+            holder = holder - 365
+        elif (current % 4) == 0:
+            current = current + 1
+            holder = holder - 366
+    actual_year = current
+    remaining_days = holder
+    # if remaining_days == 0:
+    #     remaining_days = remaining_days + 1
+    # print(current)
+    return day_helper(remaining_days, current)
 
 
 def conv_endian(num, endian='big'):
