@@ -132,10 +132,61 @@ class TestCaseMyDateTime(unittest.TestCase):
         self.assertEqual(expected, task.my_datetime(date))
 
 
-class TestCase(unittest.TestCase):
+class TestCaseConvEndian(unittest.TestCase):
 
     def test1(self):
-        self.assertTrue(True)
+        # checking an edge case.
+        num = 0
+        expected = '00'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test2(self):
+        # a small number big endian.
+        num = 1
+        expected = '01'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test3(self):
+        # checking if 'little' endian value passes.
+        num = 1
+        expected = '01'
+        self.assertEqual(expected, task.conv_endian(num, 'little'))
+
+    def test4(self):
+        # checking invalid endian value returns None.
+        num = 1
+        expected = None
+        self.assertEqual(expected, task.conv_endian(num, 'middle'))
+
+    def test5(self):
+        # a small negative number, big endian.
+        num = -1
+        expected = '-01'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test6(self):
+        # a random number, big endian.
+        num = 79846551
+        expected = '04 C2 5C 97'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test7(self):
+        # a random number, little endian.
+        num = 79846551
+        expected = '97 5C C2 04'
+        self.assertEqual(expected, task.conv_endian(num, 'little'))
+
+    def test8(self):
+        # a random number, passing 'big' value for endian.
+        num = 224885255
+        expected = '0D 67 7A 07'
+        self.assertEqual(expected, task.conv_endian(num, 'big'))
+
+    def test9(self):
+        # a random negative number, little endian.
+        num = -224885255
+        expected = '-07 7A 67 0D'
+        self.assertEqual(expected, task.conv_endian(num, 'little'))
 
 
 if __name__ == '__main__':
