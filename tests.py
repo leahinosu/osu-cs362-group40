@@ -126,6 +126,10 @@ class TestCaseMyDateTime(unittest.TestCase):
         expected = "01-03-1972"
         self.assertEqual(expected, task.my_datetime(date))
 
+    def test7(self):
+        date = 7854 * 86400
+        expected = "07-04-1991"
+        self.assertEqual(expected, task.my_datetime(date))
 
 class TestCase(unittest.TestCase):
 
