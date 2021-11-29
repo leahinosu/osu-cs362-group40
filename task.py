@@ -106,7 +106,7 @@ def my_datetime(num_sec):
     remaining_days = holder
     # if remaining_days == 0:
     #     remaining_days = remaining_days + 1
-    print(current)
+    # print(current)
     if current % 4 == 0:
         if remaining_days < 32:
             month = '01'
