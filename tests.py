@@ -94,10 +94,99 @@ class TestCaseConvNum(unittest.TestCase):
         self.assertEqual(expected, task.conv_num(sample))
 
 
-class TestCase(unittest.TestCase):
+class TestCaseMyDateTime(unittest.TestCase):
 
     def test1(self):
-        self.assertTrue(True)
+        date = 0
+        expected = "01-01-1970"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test2(self):
+        date = 86400
+        expected = "01-02-1970"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test3(self):
+        date = 364 * 86400
+        expected = "12-31-1970"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test4(self):
+        date = 365 * 86400
+        expected = "01-01-1971"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test5(self):
+        date = 729 * 86400
+        expected = "12-31-1971"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test6(self):
+        date = 732 * 86400
+        expected = "01-03-1972"
+        self.assertEqual(expected, task.my_datetime(date))
+
+    def test7(self):
+        date = 7854 * 86400
+        expected = "07-04-1991"
+        self.assertEqual(expected, task.my_datetime(date))
+
+
+class TestCaseConvEndian(unittest.TestCase):
+
+    def test1(self):
+        # checking an edge case.
+        num = 0
+        expected = '00'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test2(self):
+        # a small number big endian.
+        num = 1
+        expected = '01'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test3(self):
+        # checking if 'little' endian value passes.
+        num = 1
+        expected = '01'
+        self.assertEqual(expected, task.conv_endian(num, 'little'))
+
+    def test4(self):
+        # checking invalid endian value returns None.
+        num = 1
+        expected = None
+        self.assertEqual(expected, task.conv_endian(num, 'middle'))
+
+    def test5(self):
+        # a small negative number, big endian.
+        num = -1
+        expected = '-01'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test6(self):
+        # a random number, big endian.
+        num = 79846551
+        expected = '04 C2 5C 97'
+        self.assertEqual(expected, task.conv_endian(num))
+
+    def test7(self):
+        # a random number, little endian.
+        num = 79846551
+        expected = '97 5C C2 04'
+        self.assertEqual(expected, task.conv_endian(num, 'little'))
+
+    def test8(self):
+        # a random number, passing 'big' value for endian.
+        num = 224885255
+        expected = '0D 67 7A 07'
+        self.assertEqual(expected, task.conv_endian(num, 'big'))
+
+    def test9(self):
+        # a random negative number, little endian.
+        num = -224885255
+        expected = '-07 7A 67 0D'
+        self.assertEqual(expected, task.conv_endian(num, 'little'))
 
 
 if __name__ == '__main__':
