@@ -1,6 +1,4 @@
-import math
-
-
+# function 1 =================================================================
 def conv_num(num_str):
     """
     Function 1: takes string, converts to a base 10 number, and returns it
@@ -17,6 +15,7 @@ def conv_num(num_str):
 
 def conv_hex(num_str):
     """
+    Helper function for function 1, num_str.
     Convert a hex-string to an integer. Invalid input returns None.
     :param str num_str: a string represents a hex.
     :return int result: base 10 number.
@@ -44,6 +43,7 @@ def conv_hex(num_str):
 
 def conv_dec(num_str):
     """
+    Helper function for function 1, num_str.
     Convert a decimal-string to a decimal. Invalid input returns None.
     :param str num_str: a string represents a decimal.
     :return int, float result: base 10 number.
@@ -74,99 +74,7 @@ def conv_dec(num_str):
     return result if num_str[0] != '-' else -result
 
 
-def day_helper(remaining_days, current):
-
-    if remaining_days < 32:
-        month = '01'
-        day = remaining_days - 0
-    if 31 < remaining_days < 60:
-        month = '02'
-        day = remaining_days - 30
-    if 59 < remaining_days < 91:
-        month = '03'
-        day = remaining_days - 59
-    if 90 < remaining_days < 121:
-        month = '04'
-        day = remaining_days - 90
-    if 120 < remaining_days < 152:
-        month = '05'
-        day = remaining_days - 120
-    if 151 < remaining_days < 182:
-        month = '06'
-        day = remaining_days - 151
-    if 181 < remaining_days < 213:
-        month = '07'
-        day = remaining_days - 181
-    if 212 < remaining_days < 244:
-        month = '08'
-        day = remaining_days - 212
-    if 243 < remaining_days < 274:
-        month = '09'
-        day = remaining_days - 243
-    if 273 < remaining_days < 305:
-        month = '10'
-        day = remaining_days - 273
-    if 304 < remaining_days < 335:
-        month = '11'
-        day = remaining_days - 304
-    if 334 < remaining_days < 366:
-        month = '12'
-        day = remaining_days - 334
-
-    result = str(month) + "-" + str(day) + "-" + str(current)
-
-    return result
-
-
-def leap_year_helper(remaining_days, current):
-    if current % 4 == 0:
-        if remaining_days < 32:
-            month = '01'
-            day = remaining_days - 0
-        if 31 < remaining_days < 61:
-            month = '02'
-            day = remaining_days - 31
-        if 60 < remaining_days < 92:
-            month = '03'
-            day = remaining_days - 60
-        if 91 < remaining_days < 122:
-            month = '04'
-            day = remaining_days - 91
-        if 121 < remaining_days < 153:
-            month = '05'
-            day = remaining_days - 121
-        if 152 < remaining_days < 183:
-            month = '06'
-            day = remaining_days - 152
-        if 182 < remaining_days < 214:
-            month = '07'
-            day = remaining_days - 182
-        if 213 < remaining_days < 245:
-            month = '08'
-            day = remaining_days - 213
-        if 244 < remaining_days < 275:
-            month = '09'
-            day = remaining_days - 244
-        if 274 < remaining_days < 306:
-            month = '10'
-            day = remaining_days - 274
-        if 305 < remaining_days < 336:
-            month = '11'
-            day = remaining_days - 303
-        if 335 < remaining_days < 367:
-            month = '12'
-            day = remaining_days - 335
-
-    day += 1
-
-    if day < 10:
-        day = '0' + str(day)
-
-    result = str(month) + "-" + str(day) + "-" + str(current)
-
-    return result
-
-
+# function 2 =================================================================
 def my_datetime(num_sec):
     """
     Function 2: takes int value that represents seconds since the epoch
@@ -175,17 +83,33 @@ def my_datetime(num_sec):
     :param int num_sec: integer representing seconds since epoch
     :return str result: date (format: MM-DD-YYYY)
     """
+    num_minutes = num_sec // 60
+    num_hours = num_minutes // 60
+    num_days = num_hours // 24
 
-    result = num_sec
+    year, remaining_days, is_leap = get_year(num_days)
 
+    month, day = get_month_day(remaining_days, is_leap)
+
+    return conv_date_to_str(year, month, day)
+
+
+def get_year(holder: int) -> tuple:
+    """
+    Helper function for function 2, my_datetime.
+    Calculate and return the year based on the given number of days.
+    :param int holder: number of days.
+    :return tuple (current: int, holder: int, is_leap: bool):
+        current: current year
+        holder: remaining days
+        is_leap: True if the current year is a leap year.
+    """
     epoch = 1970
-    num_minutes = num_sec / 60
-    num_hours = num_minutes / 60
-    num_days = num_hours / 24
-    holder = int(math.floor(num_days))
     current = epoch
-    for i in range(1, holder):
-        if holder < 366 and (current + 1) % 4 == 0:
+    is_leap = False
+    while True:
+        if current % 4 == 0 and holder < 366:
+            is_leap = True
             break
         if holder < 365:
             break
@@ -195,15 +119,52 @@ def my_datetime(num_sec):
         elif (current % 4) == 0:
             current = current + 1
             holder = holder - 366
-    actual_year = current
-    remaining_days = holder
-
-    if current % 4 == 0:
-        return leap_year_helper(remaining_days, current)
-    else:
-        return day_helper(remaining_days, current)
+    return current, holder, is_leap
 
 
+def get_month_day(remaining_days: int, is_leap: bool) -> tuple:
+    """
+    Helper function for function 2, my_datetime.
+    Calculate and return the month and the day based on the given
+    remaining days.
+    :param int remaining_days: number of days.
+    :param bool is_leap: True if the current year is a leap year.
+        Otherwise, false.
+    :return tuple (month: int, day: int):
+    """
+    # days per month starting from January.
+    month_day = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    if is_leap:
+        month_day[1] = 29
+
+    index = 0
+    month = 1
+    while remaining_days >= month_day[index]:
+        remaining_days -= month_day[index]
+        index += 1
+        month = index + 1
+
+    return month, remaining_days + 1
+
+
+def conv_date_to_str(year: int, month: int, day: int) -> str:
+    """
+    Helper function for function 2, my_datetime.
+    Convert year, month, and day to a string in format 'mm-dd-yyyy'.
+    :param year:
+    :param month:
+    :param day:
+    :return str:
+    """
+    if month < 10:
+        month = '0' + str(month)
+    if day < 10:
+        day = '0' + str(day)
+    temp_list = [str(month), str(day), str(year)]
+    return '-'.join(temp_list)
+
+
+# function 3 =================================================================
 def conv_endian(num, endian='big'):
     """
     Function 3: takes an integer value and converts to a hexadecimal number,
@@ -213,5 +174,75 @@ def conv_endian(num, endian='big'):
     :param str endian: big/little endian flag
     :return str result: hexadecimal number with proper endian
     """
-    result = num
-    return result, endian
+    possible_inputs = ['big', 'little']
+    if endian not in possible_inputs:
+        return
+
+    hex_str = format_hex_str(conv_dec_to_hex(num), endian)
+    return add_neg(hex_str) if num < 0 else hex_str
+
+
+def conv_dec_to_hex(num: int) -> str:
+    """
+    Helper function for function 3, conv_endian.
+    Convert an integer to a hex and then return the result in string.
+    If the given integer is negative, convert it to positive.
+    Add '0' in front if length of the result string is not even.
+    :param int num: an integer
+    :return str: hex of num.
+    """
+    result = ''
+    num_mapping = [str(i) for i in range(10)]
+    char_mapping = [chr(i) for i in range(65, 71)]  # 'A' to 'F'
+    hex_mapping = num_mapping + char_mapping
+
+    if num < 0:
+        num = abs(num)
+
+    while num:
+        result = hex_mapping[num % 16] + result
+        num //= 16
+
+    if result == '':
+        result = '0'
+
+    if len(result) % 2 != 0:
+        result = '0' + result
+
+    return result
+
+
+def format_hex_str(hex_str: str, endian='big') -> str:
+    """
+    Helper function for function 3, conv_endian.
+    Format hex_str to have a space per byte and to have 2 characters per byte.
+    It also arrange each bytes based on the given endian value.
+    Default endian is big. It assumes hex_str represents a positive hex.
+    :param str hex_str: string represents a hex
+    :param endian: endian either 'big' or 'little'
+    :return str:
+    """
+    temp_list = []
+    result = ''
+    is_second = False
+    for c in hex_str:
+        result = result + c
+        if is_second:
+            temp_list.append(result)
+            result = ''
+        is_second = not is_second
+
+    if endian == 'little':
+        temp_list = temp_list[:: -1]
+
+    return ' '.join(temp_list)
+
+
+def add_neg(hex_str):
+    """
+    Helper function for function 3, conv_endian.
+    Add negative sign to the given string.
+    :param hex_str: string represents a hex
+    :return str:
+    """
+    return '-' + hex_str
