@@ -211,30 +211,27 @@ class TestCaseConvEndian(unittest.TestCase):
         self.assertIsNone(task.conv_endian(num=-954786, endian='small'))
 
     def test17(self):
-        self.assertEqual(task.conv_endian(0), '00')
-
-    def test18(self):
         self.assertEqual(task.conv_endian(2), '02')
 
-    def test19(self):
+    def test18(self):
         self.assertEqual(task.conv_endian(1128), '04 68')
 
-    def test20(self):
+    def test19(self):
         self.assertEqual(task.conv_endian(256), '01 00')
 
-    def test21(self):
+    def test20(self):
         self.assertEqual(task.conv_endian(4096), '10 00')
 
-    def test22(self):
+    def test21(self):
         self.assertEqual(task.conv_endian(921), '03 99')
 
-    def test23(self):
+    def test22(self):
         self.assertEqual(task.conv_endian(188), 'BC')
 
-    def test24(self):
+    def test23(self):
         self.assertEqual(task.conv_endian(100), '64')
 
-    def test25(self):
+    def test24(self):
         self.assertEqual(task.conv_endian(590), '02 4E')
 
 
