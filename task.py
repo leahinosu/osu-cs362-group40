@@ -92,5 +92,57 @@ def conv_endian(num, endian='big'):
     :param str endian: big/little endian flag
     :return str result: hexadecimal number with proper endian
     """
-    result = num
-    return result, endian
+
+    result = ''
+    temp_result = ''
+    result_list = []
+    neg_val = False
+
+    # verify valid endian flag, return None if invalid
+    if endian != 'big' and endian != 'little':
+        return None
+
+    # special case: input is 0
+    if num == 0:
+        return '00'
+
+    # verify if result should be negative
+    if num < 0:
+        neg_val = True
+        num = abs(num)
+
+    # loop through and convert to hex using helper function
+    while num > 0:
+        temp_result = conv_endian_hex_helper(num % 16) + temp_result
+        num = num // 16
+        if len(temp_result) == 2:
+            result_list.append(temp_result)
+            temp_result = ''
+
+    # pad extra zero on front if necessary
+    if len(temp_result) > 0:
+        result_list.append('0' + temp_result)
+
+    # reverse big endian values
+    if endian == 'big':
+        result_list.reverse()
+
+    # convert list to string output
+    while len(result_list) > 0:
+        result = result + result_list.pop(0)
+        if len(result_list) > 0:
+            result = result + " "
+
+    # make negative if necessary
+    if neg_val:
+        return '-' + result
+
+    return result
+
+
+def conv_endian_hex_helper(num):
+    """using dictionary to convert decimal int to hexadecimal string"""
+    dec_to_hex = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6',
+                  7: '7', 8: '8', 9: '9', 10: 'A', 11: 'B', 12: 'C', 13: 'D',
+                  14: 'E', 15: 'F', 16: '0'}
+    return dec_to_hex.get(num)
