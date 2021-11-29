@@ -237,5 +237,6 @@ class TestCaseConvEndian(unittest.TestCase):
     def test25(self):
         self.assertEqual(task.conv_endian(590), '02 4E')
 
+
 if __name__ == '__main__':
     unittest.main()
